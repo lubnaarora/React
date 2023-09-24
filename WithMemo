@@ -1,0 +1,80 @@
+import "./styles.css";
+import React, { useState } from "react";
+
+const Post = React.memo(({ postContent, authorInfo, comments }) => {
+  // Rendering logic for a post
+  console.log("Added for",authorInfo.name);
+  return (
+    <div className="post">
+      <div className="post-header">
+        <img src={authorInfo.profilePic} alt={authorInfo.name} />
+        <h3>{authorInfo.name}</h3>
+      </div>
+      <p className="post-content">{postContent}</p>
+      <div className="comments">
+        {comments.map((comment, index) => (
+          <div key={index} className="comment">
+            <img src={comment.authorPic} alt={comment.authorName} />
+            <p>{comment.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+
+export default function App() {
+  const [posts, setPosts] = useState([
+    {
+      postContent: "This is the first post.",
+      authorInfo: {
+        name: "John Doe",
+        profilePic: "profile.jpg"
+      },
+      comments: [
+        {
+          authorName: "Alice",
+          authorPic: "alice.jpg",
+          text: "Great post!"
+        }
+      ]
+    },
+    {
+      postContent: "This is the second post.",
+      authorInfo: {
+        name: "Jane Smith",
+        profilePic: "profile.jpg"
+      },
+      comments: [
+        {
+          authorName: "Bob",
+          authorPic: "bob.jpg",
+          text: "I agree!"
+        }
+      ]
+    }
+  ]);
+
+  const addPost = () => {
+    const newPost = {
+      postContent: "A new post!",
+      authorInfo: {
+        name: "New Author",
+        profilePic: "new-author.jpg"
+      },
+      comments: []
+    };
+    setPosts([...posts, newPost]);
+  };
+
+  return (
+    <div className="App">
+      <h1>Social Media Feed</h1>
+      <button onClick={addPost}>Add Post</button>
+      {posts.map((post, index) => (
+        <Post key={index} {...post} />
+      ))}
+    </div>
+  );
+}
